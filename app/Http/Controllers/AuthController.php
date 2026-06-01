@@ -22,7 +22,7 @@ class AuthController extends Controller
             'password' => 'required|string|min:8|confirmed', 
         ]);
 
-        $user = User::create([
+        User::create([
             'name'     => $request->name,
             'email'    => $request->email,
             'phone'    => $request->phone,   
@@ -30,10 +30,7 @@ class AuthController extends Controller
             'status'   => 'active',
         ]);
 
-        Auth::login($user);
-        $request->session()->regenerate();
-
-        return redirect('/dashboard')->with('success', 'Registration successful!');
+        return redirect('/login')->with('success', 'Registration successful!');
     }
 
     public function showLogin(){
