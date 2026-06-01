@@ -22,14 +22,18 @@ class AuthController extends Controller
             'password' => 'required|string|min:8|confirmed', 
         ]);
 
-        User::create([
+        $user = User::create([
             'name'     => $request->name,
             'email'    => $request->email,
             'phone'    => $request->phone,   
-            'password' => Hash::make($request->password), 
+            'password' => Hash::make($request->password),
+            'status'   => 'active',
         ]);
 
-        return redirect('/login')->with('success', 'Registration successful!');
+        Auth::login($user);
+        $request->session()->regenerate();
+
+        return redirect('/dashboard')->with('success', 'Registration successful!');
     }
 
     public function showLogin(){
@@ -38,13 +42,11 @@ class AuthController extends Controller
 
     public function login(Request $request){
         
-
         $credentials = $request->validate([
             'email'    => 'required|email',
             'password' => 'required',
         ]);
 
-        
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
@@ -54,9 +56,5 @@ class AuthController extends Controller
         return back()->withErrors([
             'email' => 'Invalid credentials provided.',
         ])->onlyInput('email');
-
-        
     }
-
-    
 }
