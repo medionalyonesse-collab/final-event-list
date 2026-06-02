@@ -28,7 +28,7 @@
             
             @include('navbar') 
 
-            {{-- Ito ang main container ng iyong content --}}
+            {{-- Main content --}}
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4" style="background-color: #f8f9fa; min-height: 100vh;">
                 @yield('content')
             </main>
@@ -36,27 +36,46 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1100;">
+    <!-- Toast Container (Naka-fixed sa gitna-itaas) -->
+    <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1100; margin-top: 20px;">
+        
+        <!-- Success Toast -->
         @if(session('success'))
-            <div id="successToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div id="successToast" class="toast align-items-center text-white bg-success border-0 shadow" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="d-flex">
-                    <div class="toast-body fw-bold text-white">
-                        <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
+                    <div class="toast-body fw-bold d-flex align-items-center">
+                        <i class="bi bi-check-circle-fill me-2 fs-5"></i> {{ session('success') }}
                     </div>
                     <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
             </div>
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    var toastEl = document.getElementById('successToast');
-                    var toast = new bootstrap.Toast(toastEl);
-                    toast.show();
-                });
-            </script>
+        @endif
+
+        <!-- Error Toast -->
+        @if($errors->any())
+            <div id="errorToast" class="toast align-items-center text-white bg-danger border-0 shadow mt-2" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body fw-bold d-flex align-items-center">
+                        <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i> {{ $errors->first() }}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
         @endif
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // I-initialize ang lahat ng toasts sa page
+            var toastElList = [].slice.call(document.querySelectorAll('.toast'));
+            var toastList = toastElList.map(function (toastEl) {
+                return new bootstrap.Toast(toastEl, { delay: 4000 });
+            });
+            toastList.forEach(toast => toast.show());
+        });
+    </script>
     
 </body>
 </html>
