@@ -45,6 +45,27 @@
 
         {{-- RIGHT COLUMN: Profile Details --}}
         <div class="col-12 col-lg-8">
+
+            {{-- Success Message --}}
+            @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
+
+            {{-- Validation Errors --}}
+            @if($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+                    <ul class="mb-0">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            @endif
+
             <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
                 @csrf @method('PUT')
                 
@@ -61,13 +82,23 @@
                     {{-- Full Name --}}
                     <div class="mb-3">
                         <label class="form-label fw-semibold text-muted">Full Name</label>
-                        <input type="text" name="name" class="form-control" value="{{ old('name', $user->name) }}" required>
+                        <input type="text" name="name" class="form-control" 
+                            value="{{ old('name', $user->name) }}" required>
                     </div>
 
                     {{-- Email --}}
-                    <div class="mb-4">
+                    <div class="mb-3">
                         <label class="form-label fw-semibold text-muted">Email Address</label>
-                        <input type="email" name="email" class="form-control" value="{{ old('email', $user->email) }}" required>
+                        <input type="email" name="email" class="form-control" 
+                            value="{{ old('email', $user->email) }}" required>
+                    </div>
+
+                    {{-- Phone --}}
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold text-muted">Phone Number</label>
+                        <input type="text" name="phone" class="form-control" 
+                            value="{{ old('phone', $user->phone) }}" 
+                            placeholder="e.g. 09123456789">
                     </div>
 
                     <hr class="my-3">
@@ -77,12 +108,14 @@
                     {{-- Password Fields --}}
                     <div class="mb-3">
                         <label class="form-label fw-semibold text-muted">New Password</label>
-                        <input type="password" name="password" class="form-control">
+                        <input type="password" name="password" class="form-control" 
+                            autocomplete="new-password">
                     </div>
 
                     <div class="mb-4">
                         <label class="form-label fw-semibold text-muted">Confirm New Password</label>
-                        <input type="password" name="password_confirmation" class="form-control">
+                        <input type="password" name="password_confirmation" class="form-control" 
+                            autocomplete="new-password">
                     </div>
 
                     <div class="d-flex justify-content-end gap-2">

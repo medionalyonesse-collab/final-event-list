@@ -28,7 +28,6 @@ class ProfileController extends Controller
         'name'  => $request->name,
         'email' => $request->email,
         'phone' => $request->phone,
-        'sex'   => $request->sex,
     ];
 
     if ($request->hasFile('profile_picture')) {
